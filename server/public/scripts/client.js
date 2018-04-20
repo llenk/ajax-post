@@ -2,7 +2,13 @@ console.log('eyy');
 $(document).ready(onReady);
 
 function onReady() {
+    $('#recordButt').on('click', addNew);
     console.log('ayy');
+    getAllSongs();
+}
+
+function getAllSongs() {
+    $('#records').html('');
     $.ajax({
         type: 'GET', //this can also be method
         url: '/records'
@@ -28,4 +34,24 @@ function formatRecords(record) {
     returnString += '<td>' + record.cost + '</td></tr>';
     console.log(returnString);
     return returnString;
-};
+}
+
+function addNew() {
+    let record = {
+        title: $('#titleInput').val(),
+        artist: $('#artistInput').val(),
+        year: $('#yearInput').val(),
+        cost: $('#costInput').val()
+    };
+    console.log(record);
+    $('input').val('');
+    $.ajax({
+        method: 'POST',
+        url: '/add-record',
+        data: record
+    }).then(function(response) {
+        console.log(response);
+        getAllSongs();        
+    });
+
+}
